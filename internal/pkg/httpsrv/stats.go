@@ -26,3 +26,13 @@ func (s *Server) incStats(id string) {
 	// Not found, add new.
 	s.sessionStats = append(s.sessionStats, &sessionStats{id: id, sent: 1})
 }
+
+func (s *Server) deleteStats(id string) {
+	// find and delete.
+	for i, ws := range s.sessionStats {
+		if ws.id == id {
+			s.sessionStats = append(s.sessionStats[:i], s.sessionStats[i+1:]...)
+			return
+		}
+	}
+}

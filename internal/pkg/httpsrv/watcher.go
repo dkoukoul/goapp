@@ -19,6 +19,8 @@ func (s *Server) removeWatcher(w *watcher.Watcher) {
 			s.sessionStats[i].print()
 		}
 	}
+	// Remove stats first
+	s.deleteStats(w.GetWatcherId())
 	// Remove watcher.
 	delete(s.watchers, w.GetWatcherId())
 }
