@@ -1,6 +1,7 @@
 package watcher
 
 import (
+	"goapp/internal/pkg/strgen"
 	"sync"
 
 	"github.com/google/uuid"
@@ -37,6 +38,7 @@ func (w *Watcher) Start() error {
 			select {
 			case <-w.inCh:
 				w.counter.Iteration += 1
+				w.counter.Value = strgen.HexRandString(10)
 				select {
 				case w.outCh <- w.counter:
 				case <-w.quitChannel:
@@ -70,7 +72,7 @@ func (w *Watcher) ResetCounter() {
 	defer w.counterLock.Unlock()
 
 	w.counter.Iteration = 0
-
+	w.counter.Value = ""
 	select {
 	case w.outCh <- w.counter:
 	case <-w.quitChannel:

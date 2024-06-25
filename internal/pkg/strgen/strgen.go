@@ -3,6 +3,7 @@ package strgen
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"strings"
 	"sync"
 	"time"
 )
@@ -40,7 +41,7 @@ func HexRandString(length int) string {
 	if err != nil {
 		return ""
 	}
-	return hex.EncodeToString(b)
+	return strings.ToUpper(hex.EncodeToString(b))
 }
 
 func (s *StringGenerator) mainLoop() {
