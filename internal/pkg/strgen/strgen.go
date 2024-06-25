@@ -1,7 +1,8 @@
 package strgen
 
 import (
-	"goapp/pkg/util"
+	"crypto/rand"
+	"encoding/hex"
 	"sync"
 	"time"
 )
@@ -33,12 +34,21 @@ func (s *StringGenerator) Stop() {
 	s.running.Wait()
 }
 
+func HexRandString(length int) string {
+	b := make([]byte, length/2)
+	_, err := rand.Read(b)
+	if err != nil {
+		return ""
+	}
+	return hex.EncodeToString(b)
+}
+
 func (s *StringGenerator) mainLoop() {
 	defer s.running.Done()
 
 	for {
 		select {
-		case s.strChan <- util.RandString(10):
+		case s.strChan <- HexRandString(10):
 		case <-s.quitChannel:
 			return
 		default:
