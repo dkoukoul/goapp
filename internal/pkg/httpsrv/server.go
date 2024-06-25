@@ -12,6 +12,7 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/csrf"
 )
 
 type Server struct {
@@ -52,13 +53,14 @@ func (s *Server) Start() error {
 		}
 	}
 
+	CSRF := csrf.Protect([]byte("32-byte-long-auth-key"), csrf.Secure(false), csrf.CookieName("csrf_token"))
 	// Create HTTP server.
 	s.server = &http.Server{
 		Addr:         "localhost:8080",
 		WriteTimeout: 10 * time.Second,
 		ReadTimeout:  10 * time.Second,
 		IdleTimeout:  10 * time.Second,
-		Handler:      handlers.CombinedLoggingHandler(os.Stdout, r),
+		Handler:      handlers.CombinedLoggingHandler(os.Stdout, CSRF(r)),
 	}
 
 	// Start HTTP server.
