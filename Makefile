@@ -8,6 +8,11 @@ goapp:
 	mkdir -p bin
 	go build -o bin ./...
 
+.PHONY: client
+client:
+	mkdir -p bin
+	go build -o bin/client ./cmd/client
+
 .PHONY: clean
 clean:
 	go clean
